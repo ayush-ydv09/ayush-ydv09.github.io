@@ -3,384 +3,178 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a1112">
-  <meta name="description" content="Ayush Yadav — Embedded Systems and Firmware. Microcontroller projects, embedded C/C++, sensor interfacing, and real-time systems.">
-  <title>Ayush Yadav — Embedded Systems & Firmware</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #091113; --surface: #101b1e; --ink: #e7f0ed; --muted: #91a5a1;
-      --line: #243638; --accent: #52e0b1; --accent-soft: #15352f;
-      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    [data-theme="light"] {
-      color-scheme: light;
-      --bg: #f2f6f3; --surface: #ffffff; --ink: #172522; --muted: #63736d;
-      --line: #d7e2dc; --accent: #087f62; --accent-soft: #dff3eb;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.65; -webkit-font-smoothing: antialiased; background-image: linear-gradient(rgba(82,224,177,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(82,224,177,.035) 1px, transparent 1px); background-size: 36px 36px; }
-    a { color: inherit; text-decoration: none; }
-    a:hover { color: var(--accent); }
-    .shell { width: min(1040px, calc(100% - 48px)); margin: 0 auto; }
-    header { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(16px); background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--line); }
-    .nav { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand { font-size: 14px; font-weight: 700; letter-spacing: -.03em; }
-    .nav-right { display: flex; align-items: center; gap: 25px; }
-    .nav-links { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 12px; }
-    .theme { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 7px 11px; font: 11px var(--mono); cursor: pointer; }
-    main { padding-bottom: 50px; }
-    .hero { padding: 112px 0 90px; max-width: 850px; }
-    .hero h1 { text-wrap: balance; }
-    .hero .eyebrow::before { content: "▰ "; }
-    .workbench { border: 1px solid var(--line); background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, var(--accent)), var(--surface)); border-radius: 18px; padding: 24px; box-shadow: 0 18px 60px rgba(0,0,0,.18); overflow: hidden; }
-    .bench-head { display:flex; justify-content:space-between; align-items:center; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line); }
-    .bench-title { font: 11px var(--mono); letter-spacing:.12em; color:var(--accent); text-transform:uppercase; }
-    .bench-state { font:10px var(--mono); color:var(--accent); border:1px solid var(--line); border-radius:99px; padding:5px 9px; }
-    .bench-grid { display:grid; grid-template-columns: 1fr 1.1fr; gap:18px; padding-top:18px; }
-    .instrument { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:17px; min-width:0; }
-    .instrument-label { font:10px var(--mono); color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
-    .instrument-value { font: clamp(25px,4vw,36px) var(--mono); color:var(--accent); letter-spacing:-.06em; margin:8px 0 2px; }
-    .instrument small { color:var(--muted); font:10px var(--mono); }
-    .control-row { margin-top:17px; }
-    .control-row label { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font:11px var(--mono); margin-bottom:8px; }
-    input[type="range"] { width:100%; accent-color:var(--accent); cursor:pointer; }
-    .scope { background:#071012; border:1px solid #1d3c3b; border-radius:10px; padding:12px; margin-top:12px; }
-    .scope-top { display:flex; justify-content:space-between; color:#72b8a5; font:9px var(--mono); margin-bottom:8px; }
-    #scopeWave { width:100%; height:100px; display:block; }
-    .scope-grid line { stroke:#21413e; stroke-width:1; }
-    #scopePath { fill:none; stroke:#52e0b1; stroke-width:2; stroke-linejoin:round; filter:drop-shadow(0 0 4px rgba(82,224,177,.5)); }
-    .bench-bottom { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; }
-    .gpio-button { margin-top:12px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:8px; padding:9px 12px; font:11px var(--mono); cursor:pointer; }
-    .gpio-button[aria-pressed="true"] { background:var(--accent); color:#061411; }
-    .serial-log { margin:10px 0 0; padding:0; list-style:none; color:#8db6aa; font:10px/1.9 var(--mono); }
-    .serial-log li::before { content:"> "; color:#52e0b1; }
-    .bench-note { color:var(--muted); font-size:10px; margin:15px 0 0; }
-    .eyebrow { color: var(--accent); font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-    h1 { font-size: clamp(42px, 7vw, 76px); line-height: 1.04; letter-spacing: -.065em; font-weight: 620; margin: 22px 0; }
-    .lead { max-width: 670px; color: var(--muted); font-size: clamp(16px, 2vw, 19px); line-height: 1.75; }
-    .hero-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-    .pill { display: inline-flex; align-items: center; gap: 9px; border: 1px solid var(--line); padding: 10px 15px; border-radius: 999px; font-size: 12px; background: var(--surface); }
-    .pill.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-    .section { padding: 56px 0; border-top: 1px solid var(--line); }
-    .section-head { display: grid; grid-template-columns: 190px 1fr; gap: 30px; margin-bottom: 30px; }
-    .section-kicker { color: var(--accent); font: 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding-top: 8px; }
-    h2 { margin: 0; font-size: clamp(25px, 3vw, 34px); letter-spacing: -.045em; line-height: 1.2; font-weight: 580; }
-    .section-intro { color: var(--muted); max-width: 650px; margin: 12px 0 0; font-size: 14px; }
-    .focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .focus-card, .project { border: 1px solid var(--line); background: var(--surface); border-radius: 13px; }
-    .focus-card { padding: 21px; min-height: 170px; }
-    .index { color: var(--accent); font: 11px var(--mono); }
-    h3 { margin: 14px 0 8px; font-size: 16px; letter-spacing: -.025em; }
-    .focus-card p, .project p { margin: 0; color: var(--muted); font-size: 13px; }
-    .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .project { padding: 23px; display: flex; flex-direction: column; min-height: 235px; }
-    .project.featured { grid-column: 1 / -1; padding: 27px; border-color: color-mix(in srgb, var(--accent) 48%, var(--line)); background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--accent-soft) 45%, var(--surface))); }
-    .project-feature-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:22px; margin-top:20px; }
-    .project-subhead { color:var(--accent); font:10px var(--mono); letter-spacing:.1em; text-transform:uppercase; margin:0 0 9px; }
-    .architecture { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; align-items:stretch; }
-    .arch-node { border:1px solid var(--line); background:var(--bg); border-radius:8px; padding:11px 8px; text-align:center; font:10px/1.5 var(--mono); color:var(--ink); }
-    .arch-node span { display:block; color:var(--muted); font:9px var(--sans); margin-top:4px; }
-    .pin-list { display:grid; grid-template-columns:1fr 1fr; gap:7px 14px; margin:0; }
-    .pin-list div { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); padding:7px 0; font-size:11px; }
-    .pin-list dt { color:var(--muted); }
-    .pin-list dd { margin:0; font:10px var(--mono); color:var(--accent); text-align:right; }
-    .project-note { color:var(--muted); font-size:11px; border-left:2px solid var(--accent); padding:9px 12px; margin-top:15px; background:color-mix(in srgb, var(--accent-soft) 35%, transparent); }
-    .status-chip { border:1px solid var(--accent); color:var(--accent); border-radius:99px; padding:4px 8px; font:9px var(--mono); letter-spacing:.07em; }
-    .project-top { display: flex; justify-content: space-between; align-items:center; gap: 12px; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
-    .project h3 { font-size: 19px; margin: 18px 0 9px; }
-    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
-    .tag { font: 10px var(--mono); color: var(--muted); background: var(--bg); border: 1px solid var(--line); padding: 5px 8px; border-radius: 5px; }
-    .project-link { margin-top: auto; padding-top: 20px; font-size: 12px; color: var(--accent); }
-    .now-panel { display: grid; grid-template-columns: 190px 1fr; gap: 30px; }
-    .now-list { margin: 0; padding: 0; list-style: none; }
-    .now-list li { border-bottom: 1px solid var(--line); padding: 13px 0; color: var(--muted); font-size: 14px; }
-    .now-list li:first-child { padding-top: 0; }
-    .now-list strong { color: var(--ink); font-weight: 550; }
-    .contact { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 34px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-    .contact h2 { max-width: 500px; }
-    .contact p { color: var(--muted); font-size: 13px; margin-bottom: 0; }
-    footer { border-top: 1px solid var(--line); padding: 22px 0 35px; color: var(--muted); font: 10px var(--mono); display: flex; justify-content: space-between; gap: 20px; }
-    @media (max-width: 700px) {
-      .bench-grid, .bench-bottom { grid-template-columns: 1fr; }
-      .project.featured { grid-column:auto; }
-      .project-feature-grid { grid-template-columns:1fr; }
-      .architecture { grid-template-columns:repeat(2,1fr); }
-      .pin-list { grid-template-columns:1fr; }
-      .workbench { padding:16px; }
-      .shell { width: min(100% - 32px, 560px); }
-      .nav { min-height: 60px; } .nav-links { display: none; }
-      .hero { padding: 82px 0 65px; } .section { padding: 42px 0; }
-      .section-head, .now-panel { grid-template-columns: 1fr; gap: 13px; }
-      .focus-grid, .project-grid { grid-template-columns: 1fr; }
-      .focus-card { min-height: auto; }
-      .contact { align-items: flex-start; flex-direction: column; padding: 25px; }
-      footer { flex-direction: column; gap: 7px; }
-    }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  </style>
+  <meta name="theme-color" content="#080d10">
+  <meta name="description" content="Ayush Yadav — Electronics and Embedded Systems portfolio. Firmware, microcontrollers, sensor systems, C and hardware interfaces.">
+  <title>Ayush Yadav — Embedded Systems / Electronics Lab</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/app.js" defer></script>
 </head>
 <body>
-  <header>
-    <div class="shell nav">
-      <a class="brand" href="#top">AY / FIRMWARE</a>
-      <div class="nav-right">
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="#about">About</a><a href="#workbench">Workbench</a><a href="#focus">Focus</a><a href="#projects">Projects</a><a href="#now">Now</a><a href="#contact">Contact</a>
-        </nav>
-        <button class="theme" id="themeToggle" type="button" aria-label="Toggle color theme">◐ Theme</button>
+<header class="site-header"><div class="shell nav">
+  <a class="brand" href="#top">AY <b>/</b> ELECTRONICS LAB</a>
+  <div class="nav-right">
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#about">About</a><a href="#workbench">Workbench</a><a href="#projects">Projects</a><a href="#circuit">Circuit</a><a href="#notebook">Notebook</a><a href="#contact">Contact</a>
+    </nav>
+    <button class="theme" id="themeToggle" type="button" aria-label="Toggle color theme">◐ Theme</button>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+  </div>
+</div></header>
+<main id="top" class="shell">
+  <section class="hero">
+    <div class="eyebrow">Electronics & Communication Engineering · Class of 2027</div>
+    <h1>Firmware meets the <span>physical world.</span></h1>
+    <p class="lead">I'm Ayush Yadav, an ECE student focused on embedded systems and firmware development. I enjoy working close to the hardware — acquiring sensor data, interfacing peripherals, writing C/C++ logic, testing system behaviour, and debugging the details that make devices work reliably.</p>
+    <div class="hero-links">
+      <a class="pill primary" href="#workbench">Enter the workbench ↘</a>
+      <a class="pill" href="https://github.com/ayush-ydv09" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <a class="pill" href="https://www.linkedin.com/in/ayush80/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+    </div>
+    <div class="hero-meta"><span>Embedded C / C++</span><span>ESP32 · Arduino</span><span>UART · I²C · SPI</span><span>Firmware in progress</span></div>
+  </section>
+
+  <section class="section" id="workbench">
+    <div class="section-head"><div class="kicker">01 / Digital workbench</div><div><h2>A closer look at the signals.</h2><p class="intro">An interactive browser-side instrument panel. Adjust a virtual signal, inspect ADC conversion, toggle digital outputs and view a serial log. Every reading here is simulated — no physical board is connected.</p></div></div>
+    <div class="bench">
+      <div class="bench-top"><div><strong>AY / Embedded systems lab</strong><small>INSTRUMENT BUS · SESSION 001</small></div><span class="live-tag">● SIMULATION ACTIVE</span></div>
+      <div class="bench-grid">
+        <article class="instrument">
+          <div class="instrument-label">ADC input / 12-bit</div><div class="big-value" id="adcValue">2,840</div><div class="sub-value" id="adcVoltage">2.290 V / 3.300 V reference</div>
+          <div class="control"><label for="adcControl"><span>Analog input code</span><span id="adcPercent">69.4%</span></label><input id="adcControl" type="range" min="0" max="4095" value="2840"><div style="height:5px;background:var(--line);border-radius:8px;margin-top:8px"><div id="adcBar" style="height:5px;width:69.4%;background:var(--accent);border-radius:8px"></div></div></div>
+          <div class="instrument-label" style="margin-top:17px">ADC conversion</div><div class="sub-value">V = (code / 4095) × 3.3 V</div>
+        </article>
+        <article class="instrument">
+          <div class="instrument-label">Oscilloscope / CH1</div>
+          <div class="scope"><div class="scope-meta"><span>CH1 · SIMULATED</span><span id="scopeFreq">1.0 kHz</span></div>
+            <svg id="scopeWave" viewBox="0 0 320 100" role="img" aria-labelledby="waveTitle waveDescription"><title id="waveTitle">Simulated oscilloscope waveform</title><desc id="waveDescription">Sine waveform.</desc><g class="scope-grid"><line x1="0" y1="25" x2="320" y2="25"/><line x1="0" y1="50" x2="320" y2="50"/><line x1="0" y1="75" x2="320" y2="75"/><line x1="80" y1="0" x2="80" y2="100"/><line x1="160" y1="0" x2="160" y2="100"/><line x1="240" y1="0" x2="240" y2="100"/></g><path id="scopePath" d="M0 50 L320 50"/></svg>
+          </div>
+          <div class="control-row">
+            <label class="sub-value" for="waveType">Signal type</label><select class="select" id="waveType"><option value="sine">Sine</option><option value="square">Square</option><option value="pwm">PWM</option></select>
+            <button class="control-button" id="sendWaveLog" type="button">Log signal</button>
+          </div>
+          <div class="control"><label for="freqControl"><span>Frequency</span><span id="freqValue">1.0 kHz</span></label><input id="freqControl" type="range" min="0.2" max="4" step="0.1" value="1"></div>
+          <div class="control"><label for="ampControl"><span>Amplitude</span><span id="ampValue">2.0 V</span></label><input id="ampControl" type="range" min="0.2" max="3.3" step="0.1" value="2"></div>
+          <div class="control"><label for="pwmControl"><span>PWM duty cycle</span><span id="pwmPercent">65%</span></label><input id="pwmControl" type="range" min="0" max="100" value="65"></div>
+          <div class="sub-value" id="scopeAmplitude">2.0 Vpp</div>
+        </article>
+      </div>
+      <div class="bench-lower">
+        <article class="instrument"><div class="instrument-label">GPIO output bank</div><div class="sub-value">Virtual digital pin states</div><div class="pin-controls">
+          <button class="pin-toggle" type="button" data-pin="GPIO 25" aria-pressed="false"><span><i class="led"></i> GPIO 25</span><b class="pin-state">LOW</b></button>
+          <button class="pin-toggle" type="button" data-pin="GPIO 26" aria-pressed="false"><span><i class="led"></i> GPIO 26</span><b class="pin-state">LOW</b></button>
+          <button class="pin-toggle" type="button" data-pin="GPIO 27" aria-pressed="false"><span><i class="led"></i> GPIO 27</span><b class="pin-state">LOW</b></button>
+          <button class="pin-toggle" type="button" data-pin="GPIO 14" aria-pressed="false"><span><i class="led"></i> GPIO 14</span><b class="pin-state">LOW</b></button>
+        </div></article>
+        <article class="instrument"><div class="instrument-label">UART / serial terminal</div><div class="control-row"><label class="sub-value" for="baudRate">Baud rate</label><select class="select" id="baudRate"><option>9600</option><option selected>115200</option><option>230400</option><option>460800</option></select></div>
+          <div class="terminal" id="serialLog" role="log" aria-live="polite"><p>BOOT: browser simulation ready</p><p>ADC0: raw=2840 / 4095</p><p>UART: 115200 baud · 8N1</p></div>
+          <div class="terminal-actions"><button class="control-button" id="sendUart" type="button">Transmit test frame</button><button class="control-button" id="clearTerminal" type="button">Clear</button></div>
+        </article>
+        <article class="instrument"><div class="instrument-label">Microcontroller status</div><div class="sub-value">Virtual GPIO / ADC / UART state</div><p class="sub-value" style="margin-top:13px">Target profile: ESP32-class MCU</p><p class="sub-value">ADC model: 12-bit · 0–3.3 V</p><p class="sub-value">Serial: configurable baud · 8N1</p><p class="sub-value">Outputs: software toggles only</p></article>
+      </div>
+      <div class="sensor-grid">
+        <div class="sensor-tile"><span>Temperature · simulated</span><strong id="sensorTemp">27.4 °C</strong></div>
+        <div class="sensor-tile"><span>Humidity · simulated</span><strong id="sensorHumidity">58.2 %</strong></div>
+        <div class="sensor-tile"><span>Battery · simulated</span><strong id="sensorBattery">3.91 V</strong></div>
+        <div class="sensor-tile"><span>Gas ADC · simulated</span><strong id="sensorGas">1,240</strong></div>
+      </div>
+      <div class="control-row"><button class="control-button" id="sensorRefresh" type="button">Refresh simulated sensor sample</button></div>
+      <p class="bench-note">⚠ All instrument values and sensor readings are generated locally in JavaScript. They are not live telemetry, calibrated measurements, or connected to an ESP32.</p>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="section-head"><div class="kicker">02 / About the engineer</div><div><h2>Hardware-aware software. Practical engineering.</h2><p class="intro">My interests sit where firmware meets electronics: microcontroller peripherals, sensor acquisition, communication interfaces, embedded control, and predictable system behaviour. I'm building depth through hands-on implementation, measurement, testing, and debugging.</p></div></div>
+    <div class="board-wrap">
+      <div class="panel board-card">
+        <svg class="board-svg" viewBox="0 0 520 300" role="img" aria-labelledby="boardTitle boardDesc">
+          <title id="boardTitle">Original ESP32-style development board illustration</title><desc id="boardDesc">Illustrative development board with labelled GPIO, ADC, UART, I2C and SPI pin groups. Not a manufacturing pinout.</desc>
+          <rect x="105" y="18" width="310" height="264" rx="17" fill="#15332e" stroke="#62e6b5" stroke-width="2"/>
+          <rect x="187" y="28" width="146" height="34" rx="4" fill="#a9b7b0"/><path d="M194 34h132M194 42h132M194 50h132" stroke="#566761" stroke-width="2"/>
+          <rect x="180" y="83" width="160" height="128" rx="8" fill="#17242a" stroke="#69cfe0" stroke-width="2"/>
+          <text x="260" y="130" fill="#e7f1ef" text-anchor="middle" font-size="22">ESP32</text><text x="260" y="151" fill="#69cfe0" text-anchor="middle" font-size="11">WROOM MODULE</text><text x="260" y="181" fill="#91a5a6" text-anchor="middle" font-size="9">MCU · Wi-Fi · BLE</text>
+          <rect x="222" y="226" width="76" height="37" rx="5" fill="#aeb9b4"/><rect x="235" y="234" width="50" height="21" fill="#26383d"/>
+          <g fill="#d6e4df" stroke="#26383d" stroke-width="1"><rect x="93" y="42" width="12" height="13"/><rect x="93" y="68" width="12" height="13"/><rect x="93" y="94" width="12" height="13"/><rect x="93" y="120" width="12" height="13"/><rect x="93" y="146" width="12" height="13"/><rect x="93" y="172" width="12" height="13"/><rect x="93" y="198" width="12" height="13"/><rect x="93" y="224" width="12" height="13"/><rect x="415" y="42" width="12" height="13"/><rect x="415" y="68" width="12" height="13"/><rect x="415" y="94" width="12" height="13"/><rect x="415" y="120" width="12" height="13"/><rect x="415" y="146" width="12" height="13"/><rect x="415" y="172" width="12" height="13"/><rect x="415" y="198" width="12" height="13"/><rect x="415" y="224" width="12" height="13"/></g>
+          <g fill="#62e6b5" font-size="9"><text x="75" y="51" text-anchor="end">3V3</text><text x="75" y="77" text-anchor="end">EN</text><text x="75" y="103" text-anchor="end">GPIO 36 / ADC</text><text x="75" y="129" text-anchor="end">GPIO 39 / ADC</text><text x="75" y="155" text-anchor="end">GPIO 34 / ADC</text><text x="75" y="181" text-anchor="end">GPIO 35 / ADC</text><text x="75" y="207" text-anchor="end">GPIO 32 / PWM</text><text x="75" y="233" text-anchor="end">GPIO 33 / PWM</text><text x="445" y="51">GND</text><text x="445" y="77">GPIO 23 / SPI</text><text x="445" y="103">GPIO 22 / I2C SCL*</text><text x="445" y="129">GPIO 21 / I2C SDA*</text><text x="445" y="155">GPIO 19 / SPI</text><text x="445" y="181">GPIO 18 / SPI</text><text x="445" y="207">GPIO 17 / UART</text><text x="445" y="233">GPIO 16 / UART</text></g>
+          <text x="260" y="294" text-anchor="middle" fill="#91a5a6" font-size="9">CONCEPTUAL BOARD ART · VERIFY YOUR BOARD REVISION BEFORE WIRING</text>
+        </svg>
+        <p class="board-caption">ESP32-style conceptual illustration. Labels show common interface-capable pins, not a guaranteed pinout for every development board. *Default I²C pins vary by board and firmware configuration.</p>
+      </div>
+      <div class="board-specs">
+        <div class="spec"><b>GPIO</b><span>Digital input/output and peripheral routing</span></div><div class="spec"><b>ADC</b><span>Analog acquisition (board-specific channel mapping)</span></div>
+        <div class="spec"><b>UART</b><span>Asynchronous serial communication</span></div><div class="spec"><b>I²C</b><span>Two-wire addressed bus</span></div>
+        <div class="spec"><b>SPI</b><span>Clocked serial peripheral interface</span></div><div class="spec"><b>PWM</b><span>Duty-cycle controlled digital output</span></div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main id="top" class="shell">
-    <section class="hero">
-      <div class="eyebrow">Electronics & Communication Engineering · Class of 2027</div>
-      <h1>I build firmware that connects hardware to the real world.</h1>
-      <p class="lead">I'm Ayush Yadav, an ECE student focused on embedded systems and firmware development. I enjoy working close to the hardware — acquiring sensor data, interfacing peripherals, writing C/C++ logic, testing system behavior, and debugging the details that make devices work reliably.</p>
-      <div class="hero-links">
-        <a class="pill primary" href="#projects">Explore embedded projects <span aria-hidden="true">↘</span></a>
-        <a class="pill" href="https://github.com/ayush-ydv09" target="_blank" rel="noreferrer">GitHub ↗</a>
-        <a class="pill" href="https://www.linkedin.com/in/ayush80/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-      </div>
-    </section>
+  <section class="section" id="focus">
+    <div class="section-head"><div class="kicker">03 / Engineering focus</div><div><h2>Building a strong firmware foundation.</h2><p class="intro">Areas I'm practising and developing through projects — with an emphasis on understanding how the complete embedded system behaves.</p></div></div>
+    <div class="focus-grid">
+      <article class="focus-card"><div class="index">01 — FIRMWARE</div><h3>Embedded C / C++</h3><p>Structured code, data validation, state handling, control logic, debugging and small testable modules.</p></article>
+      <article class="focus-card"><div class="index">02 — HARDWARE INTERFACES</div><h3>Microcontrollers & peripherals</h3><p>ESP32 and Arduino development, with STM32 learning underway; GPIO, ADC, UART, I²C, SPI, sensor acquisition and displays.</p></article>
+      <article class="focus-card"><div class="index">03 — REAL-TIME</div><h3>RTOS fundamentals</h3><p>Learning scheduling, task design, timing and FreeRTOS fundamentals before applying them to a practical project.</p></article>
+      <article class="focus-card"><div class="index">04 — MEASUREMENT</div><h3>Sensor acquisition</h3><p>Reading analogue and digital sensors, understanding noise, warm-up, drift, calibration and signal limitations.</p></article>
+      <article class="focus-card"><div class="index">05 — SYSTEMS</div><h3>Battery monitoring</h3><p>Exploring battery parameters, monitoring and embedded control concepts through a BMS project.</p></article>
+      <article class="focus-card"><div class="index">06 — DEBUG</div><h3>Hardware-aware debugging</h3><p>Using logs, measurements, controlled tests and fault isolation to understand unexpected system behaviour.</p></article>
+    </div>
+  </section>
 
+  <section class="section" id="projects">
+    <div class="section-head"><div class="kicker">04 / Selected work</div><div><h2>Projects, experiments and firmware practice.</h2><p class="intro">Project descriptions reflect the documented scope and current status. Work in progress is labelled honestly; no unverified performance claims are presented.</p></div></div>
+    <div class="project-grid">
+      <article class="project featured">
+        <div class="project-top"><span>01 / ESP32 · SENSOR SYSTEMS · EMBEDDED C++</span><span class="status">IN DEVELOPMENT</span></div>
+        <h3>IoT Food Spoilage Monitoring & Alerting System</h3>
+        <p>A sensor-based prototype exploring whether environmental and gas-response signals can support food-condition monitoring. The ESP32 acquires temperature, humidity and gas-sensor readings, presents system data on an OLED, and provides a local alert output.</p>
+        <div class="tags"><span class="tag">ESP32 WROOM</span><span class="tag">DHT22</span><span class="tag">MQ-135</span><span class="tag">ADC</span><span class="tag">SSD1306 OLED</span><span class="tag">I²C</span><span class="tag">Buzzer</span></div>
+        <div class="project-details"><div><h4>System architecture</h4><ul><li>DHT22: temperature and relative humidity</li><li>MQ-135: analogue gas-sensor response</li><li>ESP32: acquisition and application logic</li><li>SSD1306: I²C display; buzzer: alert output</li></ul></div><div><h4>Prototype pin notes</h4><ul><li>DHT22 data → GPIO 4</li><li>MQ-135 analogue → GPIO 35 (conditioned input)</li><li>OLED SDA / SCL → GPIO 18 / 19</li><li>OLED address → 0x3C</li><li>Buzzer control → GPIO 25</li><li>MQ sensor supply → VIN / 5 V (module-dependent)</li></ul></div></div>
+        <p class="project-link">Current stage: prototype integration and sensor characterization. Next: repeatable baseline collection, test-condition logging and humidity-response analysis. MQ sensor output is not a standalone proof of food spoilage.</p>
+        <a class="project-link" href="https://github.com/ayush-ydv09/food-spoilage-monitoring-system" target="_blank" rel="noopener noreferrer">View project repository ↗</a>
+      </article>
+      <article class="project"><div class="project-top"><span>02 / C · FIRMWARE FUNDAMENTALS</span><span class="status">PRACTICE PROJECT</span></div><h3>Virtual Sensor Firmware</h3><p>A GCC-based C practice project focused on processing sensor samples, validating readings, classifying safe and unsafe values, handling invalid data and tracking alarm conditions.</p><div class="tags"><span class="tag">C</span><span class="tag">GCC</span><span class="tag">Arrays</span><span class="tag">Functions</span><span class="tag">Validation</span></div><div class="project-details"><div><h4>Firmware concepts</h4><ul><li>Temperature sample arrays</li><li>Validity and threshold checks</li><li>Alarm counting and averages</li></ul></div><div><h4>Current scope</h4><ul><li>Host-compiled C program</li><li>Iterative learning and refactoring</li><li>No physical sensor attached</li></ul></div></div><span class="project-link">Firmware practice · GCC / Windows</span></article>
+      <article class="project"><div class="project-top"><span>03 / ARDUINO · MOTION CONTROL</span><span class="status">PROJECT</span></div><h3>Joystick-Controlled Robotic Arm</h3><p>A 4-DOF control project using analogue joystick inputs and servo motors. The documented implementation includes ADC acquisition, exponential moving-average filtering, dead-zone handling, motion limiting and non-blocking periodic updates.</p><div class="tags"><span class="tag">Arduino</span><span class="tag">C/C++</span><span class="tag">ADC</span><span class="tag">Servo control</span></div><a class="project-link" href="https://github.com/ayush-ydv09/ROBOTIC_ARM" target="_blank" rel="noopener noreferrer">View repository ↗</a></article>
+      <article class="project"><div class="project-top"><span>04 / BATTERY MONITORING</span><span class="status">PROJECT EXPERIENCE</span></div><h3>Battery Management System</h3><p>A battery parameter monitoring project exploring measurement, monitoring and the role of embedded control and protection concepts in a battery management system.</p><div class="tags"><span class="tag">Embedded systems</span><span class="tag">Battery monitoring</span><span class="tag">Measurement</span></div><span class="project-link">Project experience · Detailed implementation notes not yet published</span></article>
+    </div>
+  </section>
 
-    <section class="section" id="workbench">
-      <div class="section-head">
-        <div class="section-kicker">01 / Digital workbench</div>
-        <div>
-          <h2>A little closer to the hardware.</h2>
-          <p class="section-intro">An interactive, simulated instrument panel inspired by the tools and signals behind embedded firmware. Adjust the inputs and watch the display respond.</p>
-        </div>
-      </div>
-      <div class="workbench">
-        <div class="bench-head"><div><div class="bench-title">AY / Embedded systems lab</div><strong>Signal & peripheral monitor</strong></div><span class="bench-state">● SIMULATION RUNNING</span></div>
-        <div class="bench-grid">
-          <div class="instrument">
-            <div class="instrument-label">ADC channel 0 / 12-bit</div>
-            <div class="instrument-value" id="adcValue">2,840</div>
-            <small id="adcVoltage">2.29 V · 0–3.3 V reference</small>
-            <div class="control-row"><label for="adcControl"><span>Analog input</span><span id="adcPercent">69.4%</span></label><input id="adcControl" type="range" min="0" max="4095" value="2840"></div>
-            <div class="control-row"><label for="pwmControl"><span>PWM duty cycle</span><span id="pwmPercent">65%</span></label><input id="pwmControl" type="range" min="0" max="100" value="65"></div>
-          </div>
-          <div class="instrument">
-            <div class="instrument-label">Oscilloscope / PWM output</div>
-            <div class="scope">
-              <div class="scope-top"><span>CH1 · DIGITAL</span><span id="scopeFreq">1.0 kHz</span></div>
-              <svg id="scopeWave" viewBox="0 0 320 100" role="img" aria-label="Simulated PWM waveform">
-                <g class="scope-grid"><line x1="0" y1="25" x2="320" y2="25"/><line x1="0" y1="50" x2="320" y2="50"/><line x1="0" y1="75" x2="320" y2="75"/><line x1="80" y1="0" x2="80" y2="100"/><line x1="160" y1="0" x2="160" y2="100"/><line x1="240" y1="0" x2="240" y2="100"/></g>
-                <path id="scopePath" d="M0 75 L0 20 L52 20 L52 75 L80 75 L80 20 L132 20 L132 75 L160 75 L160 20 L212 20 L212 75 L240 75 L240 20 L292 20 L292 75 L320 75"/>
-              </svg>
-            </div>
-            <small>Illustrative signal · duty cycle controlled above</small>
-          </div>
-        </div>
-        <div class="bench-bottom">
-          <div class="instrument">
-            <div class="instrument-label">GPIO 25 / digital output</div>
-            <div class="instrument-value" id="gpioState">LOW</div>
-            <small>Simulated output pin state</small><br>
-            <button class="gpio-button" id="gpioToggle" type="button" aria-pressed="false">Toggle GPIO → HIGH</button>
-          </div>
-          <div class="instrument">
-            <div class="instrument-label">UART / serial console</div>
-            <ul class="serial-log" id="serialLog" aria-live="polite"><li>BOOT: workbench simulation ready</li><li>ADC0: raw=2840, v=2.29</li><li>PWM: duty=65%, freq=1kHz</li></ul>
-          </div>
-        </div>
-        <p class="bench-note">Educational UI simulation only — values are generated in your browser and are not connected to physical hardware or live ESP32 telemetry.</p>
-      </div>
-    </section>
+  <section class="section" id="circuit">
+    <div class="section-head"><div class="kicker">05 / Inside the circuit</div><div><h2>ESP32 sensor-monitoring system.</h2><p class="intro">Conceptual signal-level schematic based on the documented prototype. This is an explanatory drawing, not a production wiring diagram. Confirm the exact module pinout, supply requirements and conditioning circuit before connecting hardware.</p></div></div>
+    <div class="panel"><div class="schematic-wrap">
+      <svg class="schematic" viewBox="0 0 980 510" role="img" aria-labelledby="schTitle schDesc">
+        <title id="schTitle">Conceptual ESP32 sensor monitoring schematic</title><desc id="schDesc">DHT22 data connects to GPIO4. MQ135 analogue output passes through a voltage-conditioning stage before ADC GPIO35. SSD1306 OLED uses I2C GPIO18 and GPIO19. Buzzer and status LED are driven through suitable driver or current-limiting components.</desc>
+        <defs><marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#69cfe0"/></marker></defs>
+        <rect class="device" x="390" y="145" width="220" height="205" rx="12"/><text x="500" y="180" text-anchor="middle">ESP32 DEV BOARD</text><text class="sub" x="500" y="201" text-anchor="middle">3.3 V logic domain</text><text x="410" y="235">GPIO 4  ·  DHT DATA</text><text x="410" y="261">GPIO 35 · ADC INPUT</text><text x="410" y="287">GPIO 18 · I²C SCL</text><text x="410" y="313">GPIO 19 · I²C SDA</text><text x="410" y="335">GPIO 25 · ALERT CTRL</text>
+        <rect class="sensor" x="35" y="45" width="220" height="95" rx="9"/><text x="145" y="77" text-anchor="middle">DHT22</text><text class="sub" x="145" y="99" text-anchor="middle">Temperature / humidity</text><text class="sub" x="145" y="119" text-anchor="middle">DATA · VCC · GND</text>
+        <path class="wire" d="M255 92H325V235H390" marker-end="url(#arr)"/><text class="sub" x="280" y="82">DATA → GPIO 4</text>
+        <rect class="sensor" x="35" y="205" width="220" height="105" rx="9"/><text x="145" y="238" text-anchor="middle">MQ-135 MODULE</text><text class="sub" x="145" y="260" text-anchor="middle">Analogue response (AO)</text><text class="sub" x="145" y="282" text-anchor="middle">Module supply may be 5 V</text>
+        <path class="wire" d="M255 257H300V390H345" marker-end="url(#arr)"/><rect class="sensor" x="345" y="370" width="230" height="70" rx="8"/><text x="460" y="397" text-anchor="middle">VOLTAGE CONDITIONING</text><text class="sub" x="460" y="418" text-anchor="middle">Divider / verified interface</text><path class="wire" d="M460 370V350H500" marker-end="url(#arr)"/><text class="sub" x="480" y="361">Safe ADC range</text>
+        <rect class="sensor" x="725" y="45" width="220" height="95" rx="9"/><text x="835" y="77" text-anchor="middle">SSD1306 OLED</text><text class="sub" x="835" y="99" text-anchor="middle">I²C · address 0x3C</text><text class="sub" x="835" y="119" text-anchor="middle">SDA / SCL</text>
+        <path class="wire" d="M610 287H680V92H725" marker-end="url(#arr)"/><text class="sub" x="620" y="278">SCL · GPIO 18</text><path class="wire" d="M610 313H700V115H725" marker-end="url(#arr)"/><text class="sub" x="620" y="329">SDA · GPIO 19</text>
+        <rect class="sensor" x="725" y="205" width="220" height="82" rx="9"/><text x="835" y="237" text-anchor="middle">BUZZER DRIVER</text><text class="sub" x="835" y="260" text-anchor="middle">GPIO25 → driver → buzzer</text><path class="wire" d="M610 335H670V247H725" marker-end="url(#arr)"/>
+        <rect class="sensor" x="725" y="350" width="220" height="82" rx="9"/><text x="835" y="382" text-anchor="middle">STATUS LED</text><text class="sub" x="835" y="405" text-anchor="middle">GPIO → resistor → LED</text><path class="wire" d="M610 335H650V391H725" marker-end="url(#arr)"/>
+        <path class="wire power" d="M55 165H920"/><text class="sub" x="58" y="157">POWER RAILS — use the voltage required by each module</text><path class="wire ground" d="M55 470H920"/><text class="sub" x="60" y="488">COMMON GROUND REFERENCE · VERIFY MODULE AND BOARD REQUIREMENTS</text>
+        <path class="wire power" d="M145 140V165M835 140V165M500 145V165"/><path class="wire ground" d="M145 310V470M835 432V470M500 350V470"/>
+      </svg>
+    </div><div class="schematic-legend"><span><i class="legend-line"></i>Signal path</span><span><i class="legend-line power"></i>Power rail (illustrative)</span><span><i class="legend-line ground"></i>Ground reference</span><span>Not to scale · Illustrative only</span></div></div>
+    <p class="intro">Safety notes: ESP32 GPIO is not 5 V tolerant. MQ-module analogue outputs can exceed the ESP32 ADC input range; use a calculated, verified divider or suitable buffer. Use a transistor/MOSFET driver where required for a buzzer, and a series resistor for an LED. Do not connect module power rails based only on this drawing.</p>
+  </section>
 
-    <section class="section" id="about">
-      <div class="section-head">
-        <div class="section-kicker">01 / About</div>
-        <div>
-          <h2>Hardware-aware software. Practical engineering.</h2>
-          <p class="section-intro">My interests sit where firmware meets electronics: microcontroller peripherals, sensor acquisition, communication interfaces, embedded control, and predictable system behavior. I'm building depth through hands-on implementation, measurement, testing, and debugging.</p>
-        </div>
-      </div>
-    </section>
+  <section class="section" id="notebook">
+    <div class="section-head"><div class="kicker">06 / Engineering notebook</div><div><h2>Notes from the bench.</h2><p class="intro">Short technical explainers on the concepts behind embedded firmware. Open a note to explore the key idea.</p></div></div>
+    <div class="notebook-grid">
+      <article class="note-card"><div class="index">NOTE 01 / DATA ACQUISITION</div><h3>ADC & signal acquisition</h3><p>Turning a continuous voltage into a digital code.</p><details><summary>Open notebook entry</summary><p>An ideal N-bit ADC has 2^N quantization codes. For a 12-bit range from 0 to 3.3 V, an approximate conversion is V = code × 3.3 / 4095. Real measurements also depend on reference accuracy, input impedance, noise, attenuation and ADC non-linearity.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 02 / SERIAL BUSES</div><h3>UART vs I²C vs SPI</h3><p>Three interfaces, different timing and wiring trade-offs.</p><details><summary>Open notebook entry</summary><p>UART is asynchronous point-to-point serial using agreed framing and baud rate. I²C uses SDA/SCL with addressed devices and open-drain signalling. SPI uses a clock, data lines and typically a chip-select per peripheral; it is often faster but uses more pins.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 03 / TIMING</div><h3>PWM generation</h3><p>Control average delivered power with a timed digital output.</p><details><summary>Open notebook entry</summary><p>PWM alternates between logic levels. Duty cycle is the fraction of a period spent HIGH. At a fixed supply, the average ideal voltage is approximately duty × supply voltage for a simple low-pass/load interpretation. Frequency and load characteristics matter.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 04 / EVENTS</div><h3>Interrupts</h3><p>Responding to events without continuously polling.</p><details><summary>Open notebook entry</summary><p>An interrupt service routine should be short and predictable: capture the event, update minimal state, and defer heavier work to the main loop or a task. Shared data needs careful synchronization and platform-specific ISR-safe APIs.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 05 / LANGUAGE</div><h3>Embedded C</h3><p>Explicit control over memory, data and hardware interfaces.</p><details><summary>Open notebook entry</summary><p>Embedded C commonly uses fixed-width integer types, explicit peripheral interfaces, bounded buffers and careful error handling. Volatile is relevant to objects changed outside normal program flow, such as memory-mapped registers, but it is not a general concurrency primitive.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 06 / SCHEDULING</div><h3>FreeRTOS task scheduling</h3><p>Split firmware into concurrent, cooperating activities.</p><details><summary>Open notebook entry</summary><p>Tasks have priorities and states; a scheduler selects runnable work. Queues, semaphores and task notifications support coordination. Timing, stack sizing, priority inversion and blocking behaviour should be considered in system design.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 07 / ENERGY</div><h3>Battery Management Systems</h3><p>Monitor and protect cells and packs.</p><details><summary>Open notebook entry</summary><p>A BMS may monitor cell voltage, pack current and temperature, estimate state of charge/health, balance cells and control protection switches. Safe thresholds and algorithms depend on cell chemistry, pack design and validated requirements.</p></details></article>
+      <article class="note-card"><div class="index">NOTE 08 / VEHICLE NETWORKS</div><h3>CAN communication</h3><p>Robust message-based communication on shared buses.</p><details><summary>Open notebook entry</summary><p>CAN uses message identifiers and arbitration rather than node addresses in the usual sense. Differential signalling, termination and bit timing are important. Higher-layer protocols define additional conventions for diagnostics and device profiles.</p></details></article>
+    </div>
+  </section>
 
-    <section class="section" id="focus">
-      <div class="section-head">
-        <div class="section-kicker">02 / Engineering focus</div>
-        <div>
-          <h2>Building a strong firmware foundation</h2>
-          <p class="section-intro">The areas I'm practising and developing through projects — with an emphasis on understanding how the complete embedded system behaves.</p>
-        </div>
-      </div>
-      <div class="focus-grid">
-        <article class="focus-card">
-          <div class="index">01 — FIRMWARE</div>
-          <h3>Embedded C/C++</h3>
-          <p>Structured C/C++ code, data validation, state handling, control logic, debugging, and writing small modules that are easier to test and maintain.</p>
-        </article>
-        <article class="focus-card">
-          <div class="index">02 — HARDWARE INTERFACES</div>
-          <h3>Microcontrollers & peripherals</h3>
-          <p>ESP32 and Arduino development, with STM32 learning underway; GPIO, ADC, UART, I²C, SPI, sensor acquisition, displays, and actuator interfacing.</p>
-        </article>
-        <article class="focus-card">
-          <div class="index">03 — EXPLORING</div>
-          <h3>Real-time firmware</h3>
-          <p>Learning scheduling, task design, timing, and FreeRTOS fundamentals before applying them to a practical microcontroller project.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="section-head">
-        <div class="section-kicker">03 / Selected work</div>
-        <div>
-          <h2>Embedded projects and firmware practice</h2>
-          <p class="section-intro">Projects centred on microcontrollers, sensing, signal acquisition, firmware logic, and control. Each description reflects the current documented scope.</p>
-        </div>
-      </div>
-      <div class="project-grid">
-        <article class="project featured">
-          <div class="project-top"><span>01 / ESP32 · SENSOR SYSTEMS · EMBEDDED C++</span><span class="status-chip">● IN DEVELOPMENT</span></div>
-          <h3>IoT-Based Food Spoilage Monitoring & Alerting System</h3>
-          <p>A sensor-based prototype exploring whether environmental and gas-response signals can support food-condition monitoring. The ESP32 acquires temperature, humidity and gas-sensor readings, presents system data on an OLED, and provides a local alert output.</p>
-          <div class="tags"><span class="tag">ESP32 WROOM</span><span class="tag">DHT22</span><span class="tag">MQ-135</span><span class="tag">ADC</span><span class="tag">SSD1306 OLED</span><span class="tag">I²C</span><span class="tag">Buzzer</span></div>
-          <div class="project-feature-grid">
-            <div>
-              <div class="project-subhead">System data path</div>
-              <div class="architecture" aria-label="System data flow">
-                <div class="arch-node">DHT22<span>Temp. / RH</span></div>
-                <div class="arch-node">MQ-135<span>Analog response</span></div>
-                <div class="arch-node">ESP32<span>Acquire / process</span></div>
-                <div class="arch-node">OLED + alert<span>Display / buzzer</span></div>
-              </div>
-              <div class="project-note">Engineering focus: sensor warm-up, baseline collection, humidity-related response, drift, repeatability and cross-sensitivity. Gas-sensor readings are treated as indicators to characterize—not as a standalone proof that food is spoiled.</div>
-            </div>
-            <div>
-              <div class="project-subhead">Current prototype connections</div>
-              <dl class="pin-list">
-                <div><dt>DHT22 data</dt><dd>GPIO 4</dd></div>
-                <div><dt>MQ-135 analog</dt><dd>GPIO 35</dd></div>
-                <div><dt>OLED SDA / SCL</dt><dd>18 / 19</dd></div>
-                <div><dt>OLED I²C address</dt><dd>0x3C</dd></div>
-                <div><dt>Buzzer control</dt><dd>GPIO 25</dd></div>
-                <div><dt>MQ sensor supply</dt><dd>VIN / 5V</dd></div>
-              </dl>
-            </div>
-          </div>
-          <div class="project-note"><strong>Current stage:</strong> prototype integration and sensor characterization. Next steps include collecting repeatable baseline datasets, documenting test conditions, evaluating signal behaviour against reference observations, and then deciding whether a classification approach is justified.</div>
-          <span class="project-link">Ongoing research prototype · No validated spoilage classification claim</span>
-        </article>
-        <article class="project">
-          <div class="project-top"><span>C / Firmware fundamentals</span><span>02</span></div>
-          <h3>Virtual Sensor Firmware</h3>
-          <p>A GCC-based C practice project focused on processing sensor samples, validating readings, classifying safe and unsafe values, handling invalid data, and tracking alarm conditions.</p>
-          <div class="tags"><span class="tag">C</span><span class="tag">GCC</span><span class="tag">Data validation</span><span class="tag">Alarm logic</span></div>
-          <span class="project-link">Firmware practice project</span>
-        </article>
-        <article class="project">
-          <div class="project-top"><span>Arduino / Motion control</span><span>03</span></div>
-          <h3>Joystick-Controlled Robotic Arm</h3>
-          <p>A 4-DOF control project using analog joystick inputs and servo motors. The documented implementation includes ADC acquisition, exponential moving-average filtering, dead-zone handling, motion limiting, and non-blocking periodic updates.</p>
-          <div class="tags"><span class="tag">Arduino</span><span class="tag">C/C++</span><span class="tag">ADC</span><span class="tag">Servo control</span></div>
-          <a class="project-link" href="https://github.com/ayush-ydv09/ROBOTIC_ARM" target="_blank" rel="noreferrer">View repository ↗</a>
-        </article>
-        <article class="project">
-          <div class="project-top"><span>Battery monitoring</span><span>04</span></div>
-          <h3>Battery Management System</h3>
-          <p>A battery parameter monitoring project exploring measurement, monitoring, and the role of embedded control and protection concepts in a battery management system.</p>
-          <div class="tags"><span class="tag">Embedded systems</span><span class="tag">Battery monitoring</span><span class="tag">Measurement</span></div>
-          <span class="project-link">Project experience</span>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="now">
-      <div class="now-panel">
-        <div class="section-kicker">04 / Currently learning</div>
-        <div>
-          <h2>Going deeper into firmware, one layer at a time.</h2>
-          <ul class="now-list">
-            <li><strong>Embedded C:</strong> improving code structure, validation, modularity, and testability.</li>
-            <li><strong>STM32:</strong> learning microcontroller peripherals and development workflows.</li>
-            <li><strong>RTOS:</strong> building foundations in task scheduling and FreeRTOS concepts.</li>
-            <li><strong>Communication:</strong> strengthening practical UART, I²C, and SPI understanding.</li>
-            <li><strong>Debugging:</strong> developing a disciplined approach to logs, measurements, and fault isolation.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="contact">
-        <div>
-          <div class="eyebrow">05 / Contact</div>
-          <h2>Let's talk embedded systems and firmware.</h2>
-          <p>I'm open to connecting with embedded engineers, firmware teams, and fellow builders.</p>
-        </div>
-        <div class="hero-links">
-          <a class="pill primary" href="https://www.linkedin.com/in/ayush80/" target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
-          <a class="pill" href="https://github.com/ayush-ydv09" target="_blank" rel="noreferrer">GitHub ↗</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="shell">
-    <span>© <span id="year"></span> Ayush Yadav</span>
-    <span>Embedded Systems · Firmware Development</span>
-    <a href="#top">Back to top ↑</a>
-  </footer>
-  <script>
-    const root = document.documentElement;
-    const savedTheme = localStorage.getItem("ay-theme");
-    if (savedTheme === "light") root.dataset.theme = "light";
-    document.getElementById("themeToggle").addEventListener("click", () => {
-      const next = root.dataset.theme === "light" ? "dark" : "light";
-      if (next === "dark") delete root.dataset.theme; else root.dataset.theme = next;
-      localStorage.setItem("ay-theme", next);
-    });
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    const adc = document.getElementById("adcControl");
-    const pwm = document.getElementById("pwmControl");
-    const log = document.getElementById("serialLog");
-    function addLog(message) {
-      const item = document.createElement("li");
-      item.textContent = message;
-      log.prepend(item);
-      while (log.children.length > 4) log.lastElementChild.remove();
-    }
-    function updateAdc() {
-      const raw = Number(adc.value);
-      const volts = raw / 4095 * 3.3;
-      document.getElementById("adcValue").textContent = raw.toLocaleString("en-IN");
-      document.getElementById("adcVoltage").textContent = volts.toFixed(2) + " V · 0–3.3 V reference";
-      document.getElementById("adcPercent").textContent = (raw / 4095 * 100).toFixed(1) + "%";
-      addLog("ADC0: raw=" + raw + ", v=" + volts.toFixed(2));
-    }
-    function updatePwm() {
-      const duty = Number(pwm.value);
-      document.getElementById("pwmPercent").textContent = duty + "%";
-      const high = 20, low = 75, period = 80, highWidth = period * duty / 100;
-      let d = "";
-      for (let x = 0; x < 320; x += period) {
-        d += "M" + x + " " + low + " L" + x + " " + high + " L" + (x + highWidth) + " " + high + " L" + (x + highWidth) + " " + low + " ";
-      }
-      d += "L320 " + low;
-      document.getElementById("scopePath").setAttribute("d", d);
-      addLog("PWM: duty=" + duty + "%, freq=1kHz");
-    }
-    adc.addEventListener("input", updateAdc);
-    pwm.addEventListener("input", updatePwm);
-    document.getElementById("gpioToggle").addEventListener("click", (event) => {
-      const button = event.currentTarget;
-      const high = button.getAttribute("aria-pressed") !== "true";
-      button.setAttribute("aria-pressed", String(high));
-      document.getElementById("gpioState").textContent = high ? "HIGH" : "LOW";
-      button.textContent = high ? "Toggle GPIO → LOW" : "Toggle GPIO → HIGH";
-      addLog("GPIO25: " + (high ? "HIGH" : "LOW"));
-    });
-  </script>
-</body>
-</html>
+  <section class="section" id="now"><div class="now-panel"><div class="kicker">07 / Currently learning</div><div><h2>Going deeper into firmware, one layer at a time.</h2><ul class="now-list"><li><strong>Embedded C:</strong> improving code structure, validation, modularity and testability.</li><li><strong>STM32:</strong> learning microcontroller peripherals and development workflows.</li><li><strong>RTOS:</strong> building foundations in task scheduling and FreeRTOS concepts.</li><li><strong>Communication:</strong> strengthening practical UART, I²C and SPI understanding.</li><li><strong>Debugging:</strong> developing a disciplined approach to logs, measurements and fault isolation.</li></ul></div></div></section>
+  <section class="section" id="contact"><div class="contact"><div><div class="eyebrow">08 / Contact</div><h2>Let's talk embedded systems and firmware.</h2><p>I'm open to connecting with embedded engineers, firmware teams and fellow builders.</p></div><div class="hero-links"><a class="pill primary" href="https://www.linkedin.com/in/ayush80/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn ↗</a><a class="pill" href="https://github.com/ayush-ydv09" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div></section>
+</main>
+<footer class="shell"><span>© <span id="year"></span> Ayush Yadav</span><span>Embedded Systems · Firmware Development</span><a href="#top">Back to top ↑</a></footer>
+</body></html>
