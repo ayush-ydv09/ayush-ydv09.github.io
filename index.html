@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f3ee">
+  <meta name="theme-color" content="#0a1112">
   <meta name="description" content="Ayush Yadav — Embedded Systems and Firmware. Microcontroller projects, embedded C/C++, sensor interfacing, and real-time systems.">
   <title>Ayush Yadav — Embedded Systems & Firmware</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #f4f3ee; --surface: #fbfaf6; --ink: #20231f; --muted: #70766d;
-      --line: #dedfd6; --accent: #9b6b36; --accent-soft: #eee4d5;
+      --bg: #091113; --surface: #101b1e; --ink: #e7f0ed; --muted: #91a5a1;
+      --line: #243638; --accent: #52e0b1; --accent-soft: #15352f;
       --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    [data-theme="dark"] {
-      color-scheme: dark;
-      --bg: #171a18; --surface: #1e2320; --ink: #edf0e9; --muted: #a0a99f;
-      --line: #343c35; --accent: #d7a66d; --accent-soft: #33291f;
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f2f6f3; --surface: #ffffff; --ink: #172522; --muted: #63736d;
+      --line: #d7e2dc; --accent: #087f62; --accent-soft: #dff3eb;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.65; -webkit-font-smoothing: antialiased; background-image: linear-gradient(rgba(82,224,177,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(82,224,177,.035) 1px, transparent 1px); background-size: 36px 36px; }
     a { color: inherit; text-decoration: none; }
     a:hover { color: var(--accent); }
     .shell { width: min(1040px, calc(100% - 48px)); margin: 0 auto; }
@@ -32,7 +32,32 @@
     .nav-links { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 12px; }
     .theme { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 7px 11px; font: 11px var(--mono); cursor: pointer; }
     main { padding-bottom: 50px; }
-    .hero { padding: 112px 0 90px; max-width: 820px; }
+    .hero { padding: 112px 0 90px; max-width: 850px; }
+    .hero h1 { text-wrap: balance; }
+    .hero .eyebrow::before { content: "▰ "; }
+    .workbench { border: 1px solid var(--line); background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, var(--accent)), var(--surface)); border-radius: 18px; padding: 24px; box-shadow: 0 18px 60px rgba(0,0,0,.18); overflow: hidden; }
+    .bench-head { display:flex; justify-content:space-between; align-items:center; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line); }
+    .bench-title { font: 11px var(--mono); letter-spacing:.12em; color:var(--accent); text-transform:uppercase; }
+    .bench-state { font:10px var(--mono); color:var(--accent); border:1px solid var(--line); border-radius:99px; padding:5px 9px; }
+    .bench-grid { display:grid; grid-template-columns: 1fr 1.1fr; gap:18px; padding-top:18px; }
+    .instrument { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:17px; min-width:0; }
+    .instrument-label { font:10px var(--mono); color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+    .instrument-value { font: clamp(25px,4vw,36px) var(--mono); color:var(--accent); letter-spacing:-.06em; margin:8px 0 2px; }
+    .instrument small { color:var(--muted); font:10px var(--mono); }
+    .control-row { margin-top:17px; }
+    .control-row label { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font:11px var(--mono); margin-bottom:8px; }
+    input[type="range"] { width:100%; accent-color:var(--accent); cursor:pointer; }
+    .scope { background:#071012; border:1px solid #1d3c3b; border-radius:10px; padding:12px; margin-top:12px; }
+    .scope-top { display:flex; justify-content:space-between; color:#72b8a5; font:9px var(--mono); margin-bottom:8px; }
+    #scopeWave { width:100%; height:100px; display:block; }
+    .scope-grid line { stroke:#21413e; stroke-width:1; }
+    #scopePath { fill:none; stroke:#52e0b1; stroke-width:2; stroke-linejoin:round; filter:drop-shadow(0 0 4px rgba(82,224,177,.5)); }
+    .bench-bottom { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; }
+    .gpio-button { margin-top:12px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); border-radius:8px; padding:9px 12px; font:11px var(--mono); cursor:pointer; }
+    .gpio-button[aria-pressed="true"] { background:var(--accent); color:#061411; }
+    .serial-log { margin:10px 0 0; padding:0; list-style:none; color:#8db6aa; font:10px/1.9 var(--mono); }
+    .serial-log li::before { content:"> "; color:#52e0b1; }
+    .bench-note { color:var(--muted); font-size:10px; margin:15px 0 0; }
     .eyebrow { color: var(--accent); font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
     h1 { font-size: clamp(42px, 7vw, 76px); line-height: 1.04; letter-spacing: -.065em; font-weight: 620; margin: 22px 0; }
     .lead { max-width: 670px; color: var(--muted); font-size: clamp(16px, 2vw, 19px); line-height: 1.75; }
@@ -67,6 +92,8 @@
     .contact p { color: var(--muted); font-size: 13px; margin-bottom: 0; }
     footer { border-top: 1px solid var(--line); padding: 22px 0 35px; color: var(--muted); font: 10px var(--mono); display: flex; justify-content: space-between; gap: 20px; }
     @media (max-width: 700px) {
+      .bench-grid, .bench-bottom { grid-template-columns: 1fr; }
+      .workbench { padding:16px; }
       .shell { width: min(100% - 32px, 560px); }
       .nav { min-height: 60px; } .nav-links { display: none; }
       .hero { padding: 82px 0 65px; } .section { padding: 42px 0; }
@@ -85,7 +112,7 @@
       <a class="brand" href="#top">AY / FIRMWARE</a>
       <div class="nav-right">
         <nav class="nav-links" aria-label="Main navigation">
-          <a href="#about">About</a><a href="#focus">Focus</a><a href="#projects">Projects</a><a href="#now">Now</a><a href="#contact">Contact</a>
+          <a href="#about">About</a><a href="#workbench">Workbench</a><a href="#focus">Focus</a><a href="#projects">Projects</a><a href="#now">Now</a><a href="#contact">Contact</a>
         </nav>
         <button class="theme" id="themeToggle" type="button" aria-label="Toggle color theme">◐ Theme</button>
       </div>
@@ -101,6 +128,53 @@
         <a class="pill primary" href="#projects">Explore embedded projects <span aria-hidden="true">↘</span></a>
         <a class="pill" href="https://github.com/ayush-ydv09" target="_blank" rel="noreferrer">GitHub ↗</a>
         <a class="pill" href="https://www.linkedin.com/in/ayush80/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      </div>
+    </section>
+
+
+    <section class="section" id="workbench">
+      <div class="section-head">
+        <div class="section-kicker">01 / Digital workbench</div>
+        <div>
+          <h2>A little closer to the hardware.</h2>
+          <p class="section-intro">An interactive, simulated instrument panel inspired by the tools and signals behind embedded firmware. Adjust the inputs and watch the display respond.</p>
+        </div>
+      </div>
+      <div class="workbench">
+        <div class="bench-head"><div><div class="bench-title">AY / Embedded systems lab</div><strong>Signal & peripheral monitor</strong></div><span class="bench-state">● SIMULATION RUNNING</span></div>
+        <div class="bench-grid">
+          <div class="instrument">
+            <div class="instrument-label">ADC channel 0 / 12-bit</div>
+            <div class="instrument-value" id="adcValue">2,840</div>
+            <small id="adcVoltage">2.29 V · 0–3.3 V reference</small>
+            <div class="control-row"><label for="adcControl"><span>Analog input</span><span id="adcPercent">69.4%</span></label><input id="adcControl" type="range" min="0" max="4095" value="2840"></div>
+            <div class="control-row"><label for="pwmControl"><span>PWM duty cycle</span><span id="pwmPercent">65%</span></label><input id="pwmControl" type="range" min="0" max="100" value="65"></div>
+          </div>
+          <div class="instrument">
+            <div class="instrument-label">Oscilloscope / PWM output</div>
+            <div class="scope">
+              <div class="scope-top"><span>CH1 · DIGITAL</span><span id="scopeFreq">1.0 kHz</span></div>
+              <svg id="scopeWave" viewBox="0 0 320 100" role="img" aria-label="Simulated PWM waveform">
+                <g class="scope-grid"><line x1="0" y1="25" x2="320" y2="25"/><line x1="0" y1="50" x2="320" y2="50"/><line x1="0" y1="75" x2="320" y2="75"/><line x1="80" y1="0" x2="80" y2="100"/><line x1="160" y1="0" x2="160" y2="100"/><line x1="240" y1="0" x2="240" y2="100"/></g>
+                <path id="scopePath" d="M0 75 L0 20 L52 20 L52 75 L80 75 L80 20 L132 20 L132 75 L160 75 L160 20 L212 20 L212 75 L240 75 L240 20 L292 20 L292 75 L320 75"/>
+              </svg>
+            </div>
+            <small>Illustrative signal · duty cycle controlled above</small>
+          </div>
+        </div>
+        <div class="bench-bottom">
+          <div class="instrument">
+            <div class="instrument-label">GPIO 25 / digital output</div>
+            <div class="instrument-value" id="gpioState">LOW</div>
+            <small>Simulated output pin state</small><br>
+            <button class="gpio-button" id="gpioToggle" type="button" aria-pressed="false">Toggle GPIO → HIGH</button>
+          </div>
+          <div class="instrument">
+            <div class="instrument-label">UART / serial console</div>
+            <ul class="serial-log" id="serialLog" aria-live="polite"><li>BOOT: workbench simulation ready</li><li>ADC0: raw=2840, v=2.29</li><li>PWM: duty=65%, freq=1kHz</li></ul>
+          </div>
+        </div>
+        <p class="bench-note">Educational UI simulation only — values are generated in your browser and are not connected to physical hardware or live ESP32 telemetry.</p>
       </div>
     </section>
 
@@ -220,13 +294,53 @@
   <script>
     const root = document.documentElement;
     const savedTheme = localStorage.getItem("ay-theme");
-    if (savedTheme) root.dataset.theme = savedTheme;
+    if (savedTheme === "light") root.dataset.theme = "light";
     document.getElementById("themeToggle").addEventListener("click", () => {
-      const next = root.dataset.theme === "dark" ? "light" : "dark";
-      root.dataset.theme = next;
+      const next = root.dataset.theme === "light" ? "dark" : "light";
+      if (next === "dark") delete root.dataset.theme; else root.dataset.theme = next;
       localStorage.setItem("ay-theme", next);
     });
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    const adc = document.getElementById("adcControl");
+    const pwm = document.getElementById("pwmControl");
+    const log = document.getElementById("serialLog");
+    function addLog(message) {
+      const item = document.createElement("li");
+      item.textContent = message;
+      log.prepend(item);
+      while (log.children.length > 4) log.lastElementChild.remove();
+    }
+    function updateAdc() {
+      const raw = Number(adc.value);
+      const volts = raw / 4095 * 3.3;
+      document.getElementById("adcValue").textContent = raw.toLocaleString("en-IN");
+      document.getElementById("adcVoltage").textContent = volts.toFixed(2) + " V · 0–3.3 V reference";
+      document.getElementById("adcPercent").textContent = (raw / 4095 * 100).toFixed(1) + "%";
+      addLog("ADC0: raw=" + raw + ", v=" + volts.toFixed(2));
+    }
+    function updatePwm() {
+      const duty = Number(pwm.value);
+      document.getElementById("pwmPercent").textContent = duty + "%";
+      const high = 20, low = 75, period = 80, highWidth = period * duty / 100;
+      let d = "";
+      for (let x = 0; x < 320; x += period) {
+        d += "M" + x + " " + low + " L" + x + " " + high + " L" + (x + highWidth) + " " + high + " L" + (x + highWidth) + " " + low + " ";
+      }
+      d += "L320 " + low;
+      document.getElementById("scopePath").setAttribute("d", d);
+      addLog("PWM: duty=" + duty + "%, freq=1kHz");
+    }
+    adc.addEventListener("input", updateAdc);
+    pwm.addEventListener("input", updatePwm);
+    document.getElementById("gpioToggle").addEventListener("click", (event) => {
+      const button = event.currentTarget;
+      const high = button.getAttribute("aria-pressed") !== "true";
+      button.setAttribute("aria-pressed", String(high));
+      document.getElementById("gpioState").textContent = high ? "HIGH" : "LOW";
+      button.textContent = high ? "Toggle GPIO → LOW" : "Toggle GPIO → HIGH";
+      addLog("GPIO25: " + (high ? "HIGH" : "LOW"));
+    });
   </script>
 </body>
 </html>
