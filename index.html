@@ -77,7 +77,19 @@
     .focus-card p, .project p { margin: 0; color: var(--muted); font-size: 13px; }
     .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     .project { padding: 23px; display: flex; flex-direction: column; min-height: 235px; }
-    .project-top { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .project.featured { grid-column: 1 / -1; padding: 27px; border-color: color-mix(in srgb, var(--accent) 48%, var(--line)); background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--accent-soft) 45%, var(--surface))); }
+    .project-feature-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:22px; margin-top:20px; }
+    .project-subhead { color:var(--accent); font:10px var(--mono); letter-spacing:.1em; text-transform:uppercase; margin:0 0 9px; }
+    .architecture { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; align-items:stretch; }
+    .arch-node { border:1px solid var(--line); background:var(--bg); border-radius:8px; padding:11px 8px; text-align:center; font:10px/1.5 var(--mono); color:var(--ink); }
+    .arch-node span { display:block; color:var(--muted); font:9px var(--sans); margin-top:4px; }
+    .pin-list { display:grid; grid-template-columns:1fr 1fr; gap:7px 14px; margin:0; }
+    .pin-list div { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); padding:7px 0; font-size:11px; }
+    .pin-list dt { color:var(--muted); }
+    .pin-list dd { margin:0; font:10px var(--mono); color:var(--accent); text-align:right; }
+    .project-note { color:var(--muted); font-size:11px; border-left:2px solid var(--accent); padding:9px 12px; margin-top:15px; background:color-mix(in srgb, var(--accent-soft) 35%, transparent); }
+    .status-chip { border:1px solid var(--accent); color:var(--accent); border-radius:99px; padding:4px 8px; font:9px var(--mono); letter-spacing:.07em; }
+    .project-top { display: flex; justify-content: space-between; align-items:center; gap: 12px; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
     .project h3 { font-size: 19px; margin: 18px 0 9px; }
     .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
     .tag { font: 10px var(--mono); color: var(--muted); background: var(--bg); border: 1px solid var(--line); padding: 5px 8px; border-radius: 5px; }
@@ -93,6 +105,10 @@
     footer { border-top: 1px solid var(--line); padding: 22px 0 35px; color: var(--muted); font: 10px var(--mono); display: flex; justify-content: space-between; gap: 20px; }
     @media (max-width: 700px) {
       .bench-grid, .bench-bottom { grid-template-columns: 1fr; }
+      .project.featured { grid-column:auto; }
+      .project-feature-grid { grid-template-columns:1fr; }
+      .architecture { grid-template-columns:repeat(2,1fr); }
+      .pin-list { grid-template-columns:1fr; }
       .workbench { padding:16px; }
       .shell { width: min(100% - 32px, 560px); }
       .nav { min-height: 60px; } .nav-links { display: none; }
@@ -224,12 +240,36 @@
         </div>
       </div>
       <div class="project-grid">
-        <article class="project">
-          <div class="project-top"><span>ESP32 / Sensor systems</span><span>01</span></div>
-          <h3>Food Spoilage Monitoring</h3>
-          <p>An ESP32 prototype combining DHT22 temperature and humidity readings with MQ-series gas sensors, an OLED display, and local alerts. Current work includes sensor warm-up, drift, humidity effects, and baseline characterization.</p>
-          <div class="tags"><span class="tag">ESP32</span><span class="tag">C++</span><span class="tag">DHT22</span><span class="tag">MQ sensors</span><span class="tag">I²C / OLED</span></div>
-          <span class="project-link">Prototype in progress</span>
+        <article class="project featured">
+          <div class="project-top"><span>01 / ESP32 · SENSOR SYSTEMS · EMBEDDED C++</span><span class="status-chip">● IN DEVELOPMENT</span></div>
+          <h3>IoT-Based Food Spoilage Monitoring & Alerting System</h3>
+          <p>A sensor-based prototype exploring whether environmental and gas-response signals can support food-condition monitoring. The ESP32 acquires temperature, humidity and gas-sensor readings, presents system data on an OLED, and provides a local alert output.</p>
+          <div class="tags"><span class="tag">ESP32 WROOM</span><span class="tag">DHT22</span><span class="tag">MQ-135</span><span class="tag">ADC</span><span class="tag">SSD1306 OLED</span><span class="tag">I²C</span><span class="tag">Buzzer</span></div>
+          <div class="project-feature-grid">
+            <div>
+              <div class="project-subhead">System data path</div>
+              <div class="architecture" aria-label="System data flow">
+                <div class="arch-node">DHT22<span>Temp. / RH</span></div>
+                <div class="arch-node">MQ-135<span>Analog response</span></div>
+                <div class="arch-node">ESP32<span>Acquire / process</span></div>
+                <div class="arch-node">OLED + alert<span>Display / buzzer</span></div>
+              </div>
+              <div class="project-note">Engineering focus: sensor warm-up, baseline collection, humidity-related response, drift, repeatability and cross-sensitivity. Gas-sensor readings are treated as indicators to characterize—not as a standalone proof that food is spoiled.</div>
+            </div>
+            <div>
+              <div class="project-subhead">Current prototype connections</div>
+              <dl class="pin-list">
+                <div><dt>DHT22 data</dt><dd>GPIO 4</dd></div>
+                <div><dt>MQ-135 analog</dt><dd>GPIO 35</dd></div>
+                <div><dt>OLED SDA / SCL</dt><dd>18 / 19</dd></div>
+                <div><dt>OLED I²C address</dt><dd>0x3C</dd></div>
+                <div><dt>Buzzer control</dt><dd>GPIO 25</dd></div>
+                <div><dt>MQ sensor supply</dt><dd>VIN / 5V</dd></div>
+              </dl>
+            </div>
+          </div>
+          <div class="project-note"><strong>Current stage:</strong> prototype integration and sensor characterization. Next steps include collecting repeatable baseline datasets, documenting test conditions, evaluating signal behaviour against reference observations, and then deciding whether a classification approach is justified.</div>
+          <span class="project-link">Ongoing research prototype · No validated spoilage classification claim</span>
         </article>
         <article class="project">
           <div class="project-top"><span>C / Firmware fundamentals</span><span>02</span></div>
